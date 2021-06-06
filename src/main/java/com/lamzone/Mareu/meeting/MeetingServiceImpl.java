@@ -28,4 +28,12 @@ public class MeetingServiceImpl implements MeetingService {
     public List<Meeting> allMeetings() {
         return meetingRepository.findAll();
     }
+
+    @Override
+    public Meeting one(Long id) {
+        Meeting meeting = meetingRepository
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Meeting.class, "meetingId", id.toString()));
+        return meeting;
+    }
 }
