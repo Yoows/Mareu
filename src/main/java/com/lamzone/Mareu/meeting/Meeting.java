@@ -1,11 +1,12 @@
 package com.lamzone.Mareu.meeting;
 
 import com.lamzone.Mareu.meeting.participant.Participant;
+import com.lamzone.Mareu.room.Room;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Data
@@ -18,10 +19,11 @@ public class Meeting {
     private Long meetingId;
 
     @Column(name = "TIME")
-    private LocalDateTime time;
+    private LocalTime time;
 
-    @Column(name = "LOCATION")
-    private String location;
+    @OneToOne
+    @JoinColumn(name = "ROOM_ID")
+    private Room room;
 
     @Column(name = "SUBJECT")
     private String subject;
@@ -29,6 +31,6 @@ public class Meeting {
     @Column(name = "DURATION")
     private int duration;
 
-    @OneToMany(mappedBy = "meeting")
+    @OneToMany(mappedBy = "meeting", cascade = CascadeType.REMOVE)
     private List<Participant> participants;
 }

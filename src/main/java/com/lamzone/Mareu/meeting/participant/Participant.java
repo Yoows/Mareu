@@ -1,16 +1,16 @@
 package com.lamzone.Mareu.meeting.participant;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.lamzone.Mareu.meeting.Meeting;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "meeting"})
 public class Participant {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

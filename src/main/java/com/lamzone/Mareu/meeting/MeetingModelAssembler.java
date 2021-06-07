@@ -1,5 +1,6 @@
 package com.lamzone.Mareu.meeting;
 
+import com.lamzone.Mareu.room.RoomController;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -16,13 +17,14 @@ public class MeetingModelAssembler implements RepresentationModelAssembler<Meeti
         return EntityModel.of(
                 meeting,
                 linkTo(methodOn(MeetingController.class).one(meeting.getMeetingId())).withSelfRel(),
-                linkTo(methodOn(MeetingController.class).allMeetings()).withRel("meetings")
+                linkTo(methodOn(MeetingController.class).allMeetings()).withRel("meetings"),
+                linkTo(methodOn(RoomController.class).one(meeting.getRoom().getRoomId())).withRel("room")
         );
     }
 
     @Override
     public CollectionModel<EntityModel<Meeting>> toCollectionModel(Iterable<? extends Meeting> entities) {
         CollectionModel<EntityModel<Meeting>> entityModels = RepresentationModelAssembler.super.toCollectionModel(entities);
-        return RepresentationModelAssembler.super.toCollectionModel(entities);
+        return entityModels.add(linkTo(methodOn(MeetingController.class).allMeetings()).withSelfRel());
     }
 }

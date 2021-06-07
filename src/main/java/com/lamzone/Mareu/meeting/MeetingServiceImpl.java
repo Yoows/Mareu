@@ -1,6 +1,9 @@
 package com.lamzone.Mareu.meeting;
 
 import com.lamzone.Mareu.exception.EntityNotFoundException;
+import com.lamzone.Mareu.meeting.participant.Participant;
+import com.lamzone.Mareu.meeting.participant.ParticipantService;
+import com.lamzone.Mareu.room.RoomService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +13,23 @@ import java.util.List;
 @AllArgsConstructor
 public class MeetingServiceImpl implements MeetingService {
     private final MeetingRepository meetingRepository;
+    private final ParticipantService participantService;
+    private final RoomService roomService;
 
     @Override
     public Meeting newMeeting(Meeting meeting) {
-        return meetingRepository.save(meeting);
+        List<Participant> participants = meeting.getParticipants();
+        Meeting newM = meetingRepository.save(meeting);
+
+        participants.forEach(participant -> {
+            participant.setMeeting(newM);
+            participantService.newParticipant(participant);
+        });
+
+        roomService.bookRoom(newM.getRoom().getRoomId());
+
+        newM.setParticipants(participants);
+        return meetingRepository.save(newM);
     }
 
     @Override
@@ -21,6 +37,7 @@ public class MeetingServiceImpl implements MeetingService {
         Meeting meeting = meetingRepository
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Meeting.class, "meetingId", id.toString()));
+        roomService.freeRoom(meeting.getRoom().getRoomId());
         meetingRepository.delete(meeting);
     }
 
@@ -31,9 +48,8 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public Meeting one(Long id) {
-        Meeting meeting = meetingRepository
+        return meetingRepository
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Meeting.class, "meetingId", id.toString()));
-        return meeting;
     }
 }

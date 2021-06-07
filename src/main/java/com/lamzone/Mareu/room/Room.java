@@ -1,11 +1,13 @@
 package com.lamzone.Mareu.room;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,4 +19,9 @@ public class Room {
 
     @Column(name = "IS_FREE")
     private boolean isFree;
+
+    public Room(String name, boolean isFree){
+        this.name = name;
+        this.isFree = isFree;
+    }
 }
