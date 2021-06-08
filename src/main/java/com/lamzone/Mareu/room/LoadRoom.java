@@ -11,19 +11,16 @@ public class LoadRoom {
     @Bean
     CommandLineRunner commandLineRunner(RoomRepository repository){
         return args -> {
-            List<Room> rooms = List.of(
-                    new Room("Mario", true),
-                    new Room("Luigi", true),
-                    new Room("Peach", true),
-                    new Room("Toad", true),
-                    new Room("Bowser", true),
-                    new Room("Wario", true),
-                    new Room("Daisy", true),
-                    new Room("Donkey Kong", true),
-                    new Room("Yoshi", true),
-                    new Room("Koopa", true)
-            );
-            repository.saveAll(rooms);
+            repository.save(new Room("Mario", true));
+            repository.save(new Room("Luigi", true));
+            repository.save(new Room("Peach", true));
+            repository.save(new Room("Toad", true));
+            repository.save(new Room("Bowser", true));
+            repository.save(new Room("Wario", true));
+            repository.save(new Room("Daisy", true));
+            repository.save(new Room("Donkey Kong", true));
+            repository.save(new Room("Yoshi", true));
+            repository.save(new Room("Koopa", true));
         };
     }
 }
