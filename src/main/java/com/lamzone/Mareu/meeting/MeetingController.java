@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/meetings")
+@CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class MeetingController {
     private final MeetingModelAssembler assembler;

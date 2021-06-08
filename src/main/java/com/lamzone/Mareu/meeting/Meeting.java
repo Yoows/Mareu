@@ -4,6 +4,7 @@ import com.lamzone.Mareu.meeting.participant.Participant;
 import com.lamzone.Mareu.room.Room;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.persistence.*;
 import java.time.LocalTime;
