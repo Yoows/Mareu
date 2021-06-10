@@ -1,8 +1,10 @@
 package com.lamzone.Mareu.security;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor
+@Getter
 public enum ApplicationUserPermission {
     EMPLOYEE_READ("employee:read"),
     EMPLOYEE_WRITE("employee:write"),

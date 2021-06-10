@@ -3,6 +3,7 @@ package com.lamzone.Mareu.security;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import static com.lamzone.Mareu.security.ApplicationUserPermission.MEETING_WRITE;
 import static com.lamzone.Mareu.security.ApplicationUserRole.*;
 
 @Configuration
@@ -24,9 +26,11 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/v1/meetings", "/api/v1/meetings/*").permitAll()
-                .antMatchers("/api/**").hasRole(EMPLOYEE.name())
+//                .antMatchers("/api/v1/meetings", "/api/v1/meetings/*").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/v1/meetings/**").hasRole(EMPLOYEE.name())
+                .antMatchers(HttpMethod.POST, "/api/v1/meetings").hasAuthority(MEETING_WRITE.getPermission())
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -39,13 +43,13 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails papa = User.builder()
                 .username("papa")
                 .password(passwordEncoder.encode("papa"))
-                .roles(EMPLOYEE.name())
+                .authorities(EMPLOYEE.geGrantedAuthorities())
                 .build();
 
         UserDetails emma = User.builder()
                 .username("emma")
-                .password("passer")
-                .roles(ADMIN.name())
+                .password(passwordEncoder.encode("passer"))
+                .authorities(ADMIN.geGrantedAuthorities())
                 .build();
 
         return new InMemoryUserDetailsManager(papa, emma);
