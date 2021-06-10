@@ -27,8 +27,8 @@ public class MeetingServiceImpl implements MeetingService {
         });
 
         roomService.bookRoom(newM.getRoom().getRoomId());
-
         newM.setParticipants(participants);
+
         return meetingRepository.save(newM);
     }
 

@@ -33,7 +33,7 @@ public class MeetingController {
                 .body(meetingEntityModel);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteMeeting(@PathVariable Long id) {
         service.deleteMeeting(id);
         return ResponseEntity.noContent().build();
