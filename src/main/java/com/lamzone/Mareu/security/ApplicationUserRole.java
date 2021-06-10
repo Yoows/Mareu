@@ -18,6 +18,10 @@ public enum ApplicationUserRole {
 
     private final Set<ApplicationUserPermission> permissions;
 
+    public String getRole(){
+        return name();
+    }
+
     public Set<SimpleGrantedAuthority> geGrantedAuthorities(){
         Set<SimpleGrantedAuthority> permissions = getPermissions()
                 .stream()

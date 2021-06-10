@@ -5,6 +5,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,6 +26,7 @@ public class MeetingController {
         return assembler.toModel(service.one(id));
     }
 
+    @PreAuthorize("hasAuthority('meeting:write')")
     @PostMapping
     public ResponseEntity<EntityModel<Meeting>> newMeeting(@RequestBody Meeting meeting) {
         EntityModel<Meeting> meetingEntityModel = assembler.toModel(service.newMeeting(meeting));
