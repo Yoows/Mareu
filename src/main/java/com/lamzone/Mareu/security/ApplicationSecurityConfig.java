@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import static com.lamzone.Mareu.security.ApplicationUserRole.*;
+
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
@@ -30,15 +32,22 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .httpBasic();
     }
-    
+
     @Bean
     @Override
     protected UserDetailsService userDetailsService() {
         UserDetails papa = User.builder()
                 .username("papa")
                 .password(passwordEncoder.encode("papa"))
-                .roles("EMPLOYEE")
+                .roles(EMPLOYEE.name())
                 .build();
-        return new InMemoryUserDetailsManager(papa);
+
+        UserDetails emma = User.builder()
+                .username("emma")
+                .password("passer")
+                .roles(ADMIN.name())
+                .build();
+
+        return new InMemoryUserDetailsManager(papa, emma);
     }
 }
