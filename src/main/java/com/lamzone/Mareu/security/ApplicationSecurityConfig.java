@@ -3,7 +3,6 @@ package com.lamzone.Mareu.security;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,8 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
-import static com.lamzone.Mareu.security.ApplicationUserPermission.MEETING_WRITE;
 import static com.lamzone.Mareu.security.ApplicationUserRole.*;
 
 @Configuration
@@ -28,12 +27,13 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeRequests()
-                .anyRequest()
-                .authenticated()
+                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
-                    .httpBasic();
+                    .authorizeRequests()
+                    .anyRequest()
+                    .authenticated()
+                    .and()
+                        .httpBasic();
     }
 
     @Bean
@@ -42,13 +42,13 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails papa = User.builder()
                 .username("papa")
                 .password(passwordEncoder.encode("papa"))
-                .authorities(EMPLOYEE.geGrantedAuthorities())
+                .authorities(EMPLOYEE.getGrantedAuthorities())
                 .build();
 
         UserDetails emma = User.builder()
                 .username("emma")
                 .password(passwordEncoder.encode("passer"))
-                .authorities(ADMIN.geGrantedAuthorities())
+                .authorities(ADMIN.getGrantedAuthorities())
                 .build();
 
         return new InMemoryUserDetailsManager(papa, emma);

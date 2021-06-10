@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 public class MeetingController {
     private final MeetingModelAssembler assembler;
     private final MeetingService service;
-    
+
+    @PreAuthorize("hasAuthority('meeting:read')")
     @GetMapping
     CollectionModel<EntityModel<Meeting>> allMeetings() {
         return assembler.toCollectionModel(service.allMeetings());
